@@ -1,0 +1,75 @@
+
+
+
+Pip assignment/
+
+pip list==>
+what it does: lists all installed packages
+output:
+	Package    Version
+	---------- -------
+	pip        21.2.4
+	setuptools 58.0.4
+------------------------------------------------------------------------
+
+deactivate ==> deactivates the virtual environment
+
+------------------------------------------------------------------------
+
+pip3 list ==> 
+what it does: specifically targets the Python3 environment, to list all installed packages
+output:
+
+	Package           Version
+	----------------- -------
+	altgraph          0.17.2
+	asgiref           3.9.1
+	Django            4.2.23
+	future            0.18.2
+	macholib          1.15.2
+	pip               21.2.4
+	setuptools        58.0.4
+	six               1.15.0
+	sqlparse          0.5.3
+	typing_extensions 4.15.0
+	wheel             0.37.0
+
+------------------------------------------------------------------------
+
+pip install Django==2.2.4 ==> 
+what it does: it installs the packages sqlparse, pytz, Django
+output: Successfully installed Django-2.2.4 pytz-2025.2 sqlparse-0.5.3
+
+------------------------------------------------------------------------
+
+pip freeze ==>  
+what it does: lists all installed packages in a format suitable for requirements.txt.
+output: 
+	Django==2.2.4
+	pytz==2025.2
+	sqlparse==0.5.3
+
+
+------------------------------------------------------------------------
+
+First cd into your Desktop directory (cd ~/Desktop), then run this command: pip freeze > requirements.txt. What do you see when you ls? What's inside this file? 
+	Django==2.2.4
+	pytz==2025.2
+	sqlparse==0.5.3
+
+------------------------------------------------------------------------
+
+pip show Django:
+what it does: displays detailed info about the Django package.
+output: 
+Name: Django
+Version: 2.2.4
+Summary: A high-level Python Web framework that encourages rapid development and clean, pragmatic design.
+Home-page: https://www.djangoproject.com/
+Author: Django Software Foundation
+Author-email: foundation@djangoproject.com
+License: BSD
+Location: /Users/nourbatniji/Desktop/python_stack/my-environment/py3Env/lib/python3.9/site-packages
+Requires: sqlparse, pytz
+
+	
