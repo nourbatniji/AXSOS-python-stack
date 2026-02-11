@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+}
+
+.inner {
+    display: flex;
+}
+
+.container2 {
+    flex-direction: column;
+}
+
+.red_box {
+    background-color: red;
+    height: 30px;
+    width: 30px;
+}
+
+.black_box {
+    background-color: black;
+    height: 30px;
+    width: 30px;
+}
+.color1, .color2{
+    height: 30px !important;
+    width: 30px !important;
+}

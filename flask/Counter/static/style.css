@@ -1,0 +1,40 @@
+body {
+    background-color: #f1f1f1;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+input {
+    padding: 5px 20px;
+}
+
+
+.container {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.counter {
+    height: 150px;
+    margin: 40px 0;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+    button {
+        border-radius: 100px;
+        border: 1px solid black;
+        padding: 5px 10px;
+        font-weight: 500;
+        background-color: #f1f1f1;
+        margin: 10px 0;
+    }
+
+    a{
+        text-decoration: none;
+        color: black;
+    
+    }

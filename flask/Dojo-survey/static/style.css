@@ -1,0 +1,62 @@
+.container {
+    margin: 50px auto;
+    padding: 30px;
+    width: 40%;
+    border: 3px solid #000;
+    font-weight: 600 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    height: 400px;
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    input,
+    label,
+    select {
+        width: 50%;
+    }
+}
+
+input,
+textarea,
+select {
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+}
+
+select {
+    font-weight: 600 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+p {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+
+    span {
+        width: 50%;
+    }
+}
+
+.btn {
+    width: 100%;
+    text-align: right;
+
+    button {
+        background-color: #76a4ae;
+        border: 2px solid #000;
+        box-shadow: 3px 3px black;
+        padding: 5px;
+        color: white;
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkerboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+<body>
+    <h1>Welcome to Checkerboard</h1>
+
+    <div class="container">
+        {% for r in range(number) %}
+        {% if num2!=0 and color1=='' and color2=='' %} {# x and y #}
+        <div class="container2">
+            {% for c in range(num2) %}
+                <div class="inner">
+                {% if (r+c)%2==0 %}
+                    <div class="black_box"></div>
+                {% else %}
+                    <div class="red_box"></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% elif num2!=0 and color1 and color2 %}
+        <div class="container2">
+            {% for c in range(num2) %}
+            <div class="inner">
+                {% if (r+c)%2==0 %}
+                    <div class="color2" style="background-color: {{ color2 }};"></div>
+                {% else %}
+                    <div class="color1 {{ color1 }}" style="background-color: {{ color1 }};"></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {%else%} {# 4 or / #}
+        <div class="inner2">
+            {% if r%2==0 %}
+            <div class="red_box"></div>
+            {% endif %}
+
+            {% if r%2!=0 %}
+            <div class="black_box"></div>
+            {% endif %}
+        </div>
+        {%endif%}
+        {% endfor %}
+    </div>
+    <!-- <script>
+        var boxes1 = document.querySelectorAll(".color1")
+        var color1 = "{{ color1 }}"
+        boxes1.forEach((box)=>{
+            box.style.backgroundColor = color1
+        })
+
+        var boxes2 = document.querySelectorAll(".color2")
+        var color2 = "{{ color2 }}"
+        boxes2.forEach((box)=>{
+            box.style.backgroundColor = color2
+        })
+    </script> -->
+
+</body>
+
+</html>

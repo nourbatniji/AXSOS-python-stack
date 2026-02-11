@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <form action="/submit" method="post">
+
+            <div class="mb-3 input-field">
+                <label for="username" class="form-label">Your Name</label>
+                <input type="text" class="form-control" id="username" name="username">
+            </div>
+
+
+            <div class="mb-3 input-field">
+                <label for="location">Dojo Location:</label>
+                <select class="form-select" aria-label="Default select example" name="location">
+                    <option value="gaza">Gaza</option>
+                    <option value="cairo">Cairo</option>
+                    <option value="ramallah">Ramallah</option>
+                </select>
+            </div>
+
+            <div class="mb-3 input-field">
+                <label for="language">Favorite Language:</label>
+                <select class="form-select" id="language" aria-label="Default select example" name="language">
+                    <option value="Python">Python</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="PHP">PHP</option>
+                </select>
+            </div>
+
+            <div class="mb-3 textarea">
+                <label for="comment">Comment (optional)</label>
+                <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+
+            <div class="btn">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

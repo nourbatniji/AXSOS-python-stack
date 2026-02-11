@@ -1,0 +1,17 @@
+h1{
+   text-align: center;
+}
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.box{
+    height: 300px;
+    width: 300px;
+    margin: 20px;
+    background-color:#9ec5f8;
+    border: 3px solid #000;
+}

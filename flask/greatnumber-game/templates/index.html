@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <h1>Welcome to the Great Number Game!</h1>
+    <h4>I am thinking of a number between 1 and 100</h4>
+    <p>Take a guess!</p>
+
+    <div>
+        <h1 class="{% if 'Too Low!' in answer %} low {% elif 'Too High!' in answer %} high {% elif 'Was the number!' in answer %} correct {% elif 'You Lose' in answer %} lose {% endif %}">{{ answer }}</h1>
+    </div>
+
+    <p>number of attempts: {{ counter }}</p>
+    
+    {% if 'Was the number!' in answer %}
+    <form action="/submit_winner" method="post">
+        <label for="winner_name">Enter Name</label>
+        <br>
+        <input type="text" name="winner_name" id="winner_name">
+        <br>
+        <button>Submit</button>
+    </form>
+    {% endif %}
+    
+
+    {% if 'Was the number!' not in answer %}
+    <form action="/submit" method="POST">
+        <input name="entered_number">
+        <br>
+        <button>Submit</button>
+    </form>
+    {% endif %}
+   
+    
+    <form id="startover" action="/startover" method="POST">
+        <button>Start over</button>
+    </form>
+
+</body>
+
+</html>

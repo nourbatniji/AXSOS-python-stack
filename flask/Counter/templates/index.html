@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body style="height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column; ">
+
+    <form action="/takenum" method="post">
+        <label for="counterByNum">
+            <h1>Enter number</h1>
+        </label>
+        <input type="number" name="counterByNum" id="counterByNum">
+        <button>Submit</button>
+    </form>
+
+    <!-- results -->
+    <div class="container">
+        <div class="counter">
+            <form action="/increment" method="post">
+                <h1>Count by number </h1>
+                <input type="hidden" name="input" id="">
+                <p id="counter">{{ counter }}</p>
+                <button>increment by number entered</button>
+            </form>
+        </div>
+
+        <div class="counter">
+            <h1>Times visited</h1>
+            <p>{{ visitingsCounter }} Times</p>
+        </div>
+    </div>
+
+
+    <button><a href="/counterBy2">increment by 2</a></button>
+    <button><a href="/destroy_session">Reset</a></button>
+ 
+</body>
+
+</html>
