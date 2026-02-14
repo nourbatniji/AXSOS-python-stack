@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome tho the Great Number Game!</h1>
+        <h4>I am thinking of a number between 1 and 100</h4>
+        <h4>Take a guess!</h4>
+
+        <form action="guess_number" method="post">
+            {% csrf_token %}
+            <input type="number" name="number">
+            <br>
+            <button>Submit</button>
+        </form>
+
+        <div
+            class="box {% if 'Low' in message or 'between' in message or 'Lose' in message  %} low {% elif 'High' in message %} high {% elif 'was' in message %} winner  {% endif %}">
+            {{ message }}
+            <form action="play_again" method="post" id="playAgain"
+                class="{%if 'was' in message or 'Lose' in message %} d-block {% else %} d-none {% endif %}">
+                {% csrf_token %}
+                <input type="hidden" name="playagain">
+                <button>Play again!</button>
+            </form>
+        </div>
+
+        <div class="winners_list">
+            <form action="winners" method="post" class="{%if 'was' in message %} d-block {% else %} d-none {% endif %}">
+                {% csrf_token %}
+                <label for="username">Enter your name:</label>
+                <br>
+                <input type="text" name="username" id="username">
+                <br>
+                <button>submit</button>
+            </form>
+        </div>
+
+        <h4>attempts: {{ attempts }}</h4>
+    </div>
+</body>
+
+</html>

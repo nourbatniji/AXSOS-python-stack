@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Counter</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="number">Enter the number of increment:</label>
+            <input type="number" name="number" id="number">
+            <p id="counter">0</p>
+            <button id="button" type="button" onclick="increment()">increment by number entered</button>
+        </form>
+
+        <h1>Number of Visits:</h1>
+        <p>{{ numberVisits }} times</p>
+
+        <button><a href="/destroy_session">Reset</a></button>
+        <button><a href="/incrementBy2">Increment by 2</a></button>
+
+
+        <script>
+            let counter = parseInt(document.getElementById('counter').innerHTML)
+            function increment() {
+                let numberValue = parseInt(document.getElementById('number').value);
+                counter += numberValue;
+                document.getElementById('counter').innerHTML = counter;
+            }
+        </script>
+    </div>
+</body>
+
+</html>

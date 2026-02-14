@@ -1,0 +1,49 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+input, textarea{
+    width: 29.7%;
+    border: 2px solid black;
+    padding: 3px;
+
+}
+textarea{
+    margin-left: 4px !important;
+}
+label{
+    font-weight: 500;
+    font-size: 18px;
+    width: 20% !important;
+
+}
+.textarea{
+    margin-top: 4px !important;
+    display: flex;
+    align-items: start;
+}
+
+button{
+    background-color: #009e0f;
+    padding: 3px 7px;
+    color: white;
+    border: 2px solid black;
+    box-shadow: 3px 3px black;
+}
+
+td, th{
+    border-left: 3px solid black !important;
+    border-right: 3px solid black !important;
+    border-bottom: 0 !important;
+    border-top: 0 !important;
+}
+thead{
+    border-top: 3px solid black !important;
+}
+tbody{
+    border-bottom: 3px solid black !important;
+}
+.bg-danger{
+    background-color: #990000 !important;
+}

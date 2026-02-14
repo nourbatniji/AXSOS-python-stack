@@ -1,0 +1,38 @@
+body {
+    background-color: #f1f1f1;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+input {
+    padding: 5px 20px;
+}
+
+.counter {
+    height: 150px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+button {
+    border-radius: 100px;
+    border: 1px solid black;
+    padding: 5px 10px;
+    font-weight: 500;
+    background-color: #f1f1f1;
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}

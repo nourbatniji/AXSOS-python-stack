@@ -1,0 +1,43 @@
+.container {
+    width: 70% !important;
+    margin: auto;
+    padding: 48px 0;
+
+    h1 {
+        padding-bottom: 20px;
+    }
+}
+
+table {
+    width: 95% !important;
+    margin: auto;
+}
+
+thead {
+    border-top: 3px solid #000 !important;
+}
+
+tbody {
+    border-bottom: 3px solid #000 !important;
+    border-top: 0;
+}
+
+th {
+    background-color: #bcbcbc !important;
+}
+
+th,
+td {
+    border-left: 3px solid #000 !important;
+    border-right: 3px solid #000 !important;
+    border-bottom: 0;
+    border-top: 0;
+}
+
+button {
+    background-color: white;
+    border: 2px solid #000;
+    box-shadow: 3px 3px #000;
+    padding: 0 5px;
+    margin-left: 5px;
+}

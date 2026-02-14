@@ -1,0 +1,31 @@
+1. from my_app.models import User
+
+2. create 3 users:
+    User.objects.create(first_name='Nour', last_name='Ibrahim', email_address='nourbatniji@gmail.com', age=21)
+    User.objects.create(first_name='Lara', last_name='Ahmed', email_address='lararahmed@gmail.com', age=22)
+    User.objects.create(first_name='Mohammed', last_name='Ahmed', email_address='mohammed', age=25)
+
+3. retrieve all users:
+    all_users = User.objects.all()
+
+4. retrieve the last user:
+    last_user = User.objects.last()
+
+4. retrieve the first user:
+    first_user = User.objects.first()
+
+5. change the user with id=3 so their last name is Pancakes:
+    user3 = User.objects.get(id=3)
+    user3.last_name = 'Pancakes'
+    user3.save()
+
+6. delete the user with id=2 from the database
+    user2 = User.objects.get(id=2)
+    user3.delete()
+
+7. get all the users, sorted by their first name
+    first_names = User.objects.all().order_by('first_name')
+
+
+8. get all the users, sorted by their first name in descending order
+    first_names_desc = User.objects.all().order_by('-first_name')
