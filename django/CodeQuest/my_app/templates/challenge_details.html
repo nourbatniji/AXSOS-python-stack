@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% block title %}{{ challenge.title }} Problem - CodeQuest{% endblock %}
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/leaderboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/challenge_details.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Challenge Header -->
+<div class="dashboard-header animate-fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+        <div>
+            <h1><i class="fas fa-code"></i> {{challenge.title}}</h1>
+            <div class="challenge-status {% if challenge_status == 'not_started' %}not-started{% elif challenge_status == 'in_progress' %}in-progress{% elif challenge_status == 'passed' %}passed{% elif challenge_status == 'failed' %}failed{% endif %}"
+                style="margin-top: 0.5rem;">
+                {% if challenge_status == "not_started" %}
+                <i class="fas fa-circle"></i> Not Started
+                {% elif challenge_status == "in_progress" %}
+                <i class="fas fa-spinner"></i> In Progress
+                {% elif challenge_status == "passed" %}
+                <i class="fas fa-check-circle"></i> Passed
+                {% elif challenge_status == "failed" %}
+                <i class="fas fa-times-circle"></i> Failed
+                {% endif %}
+            </div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <span class="badge-modern badge-{{challenge.difficulty}}">
+                <i class="fas fa-signal"></i> {{challenge.difficulty|title}}
+            </span>
+            <a href="/classrooms/" class="btn-modern btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Classroom
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="challenge-container animate-fade-in">
+    <!-- Problem Description -->
+    <div class="problem-section">
+        <h3>
+            <i class="fas fa-book"></i> Problem Description
+        </h3>
+        <p style="color: var(--text-secondary); line-height: 1.6;">{{challenge.description}}</p>
+        <p style="color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>Input:</strong>
+            {{challenge.input_description}}</p>
+        <p style="color: var(--text-secondary);"><strong>Output:</strong> {{challenge.output_description}}</p>
+
+        <h4>
+            <i class="fas fa-lightbulb"></i> Example
+        </h4>
+
+        <div class="test-case">
+            <strong>Input:</strong>
+            <pre>{{challenge.sample_input}}</pre>
+            <strong>Output:</strong>
+            <pre>{{challenge.sample_output}}</pre>
+            <strong>Explanation:</strong>
+            <p>
+                {{challenge.example_explanation}}
+            </p>
+        </div>
+
+        <h4>
+            <i class="fas fa-list"></i> Constraints
+        </h4>
+        <ul style="padding-left: 1.5rem;">
+            {% for line in challenge.constraints.splitlines %}
+            {% if line %}
+            <li>{{ line }}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+
+        <h4>
+            <i class="fas fa-tags"></i> Tags
+        </h4>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            {% for tag in challenge.tags.all %}
+            <span class="badge-modern badge-primary">{{ tag.name }}</span>
+            {% empty %}
+            <span class="text-muted">No tags</span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Code Editor -->
+    <div class="editor-section" id="challenge-data" data-slug="{{ challenge.slug }}">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3>
+                <i class="fas fa-terminal"></i> Code Editor
+            </h3>
+            <select class="filter-select">
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+
+        <form method="POST" action="{% url 'challenge_submit' challenge.slug %}">
+            {% csrf_token %}
+            <textarea id="code-editor" class="code-editor" name="code" placeholder="Write your solution here..."
+                spellcheck="false">{{ challenge.starter_code }}
+            </textarea>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button id="submit-btn" type="submit" class="btn-modern btn-primary" style="flex: 1;">
+                    <i class="fas fa-paper-plane"></i>
+                    <span class="btn-text">Submit Solution</span>
+                    <span class="spinner" style="display:none;"></span>
+                </button>
+                <button type="button" class="btn-modern btn-secondary" onclick="runTests(this)">
+                    <i class="fas fa-play"></i> Run Tests
+                    <span class="spinner" style="display:none;"></span>
+                </button>
+                <!-- Result -->
+                <div id="submission-result"></div>
+            </div>
+        </form>
+
+
+
+        <div style="margin-top: 1.5rem;">
+            <h4>
+                <i class="fas fa-vial"></i> Test Results
+            </h4>
+            <div id="test-results">
+                <p>
+                    <i class="fas fa-info-circle"></i> Run tests to see results
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submission History -->
+<div class="submission-header" style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
+    Submission #{{ submission.attempt_number }}
+</div>
+<!-- Submissions List -->
+
+
+<div class="animate-fade-in" style="margin-bottom: 2rem;" id="submission-list">
+    {% for submission in submissions %}
+    <div class="submission-item" data-id="{{ submission.id }}">
+        <div>
+            <div class="submission-header"
+                style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem;">
+                Submission #{{ forloop.counter }}
+            </div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                <i class="fas fa-clock"></i> {{ submission.created_at|timesince }} ago
+            </div>
+
+            <pre class="submission-code">{{ submission.code }}</pre>
+
+
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: right;">
+            <span class="badge-modern" style="background-color: rgba(16, 185, 129, 0.1); color: var(--success);">
+                <i class="fas fa-check-circle"></i> {{ submission.status }}
+            </span>
+            <button class="view-code-btn btn-modern btn-secondary" style="padding: 0.5rem 1rem;">
+                <i class="fas fa-eye"></i> View Code
+            </button>
+        </div>
+    </div>
+
+    {% empty %}
+    <div id="no-submissions" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+        No submissions yet
+    </div>
+    {% endfor %}
+</div>
+
+
+
+<!-- Discussions -->
+<div class="section-header">
+    <h2><i class="fas fa-comments"></i> Discussions</h2>
+</div>
+
+<div class="animate-fade-in">
+
+    <form id="comment-form" method="POST" action="{% url 'add_comment' challenge.slug %}">
+        {% csrf_token %}
+        <div class="card-modern" style="margin-bottom: 1.5rem;">
+            <h4 style="margin-bottom: 1rem; color: var(--text-primary);">
+                <i class="fas fa-comment-dots"></i> Add a Comment
+            </h4>
+
+            <textarea id="comment-input" name="content" class="form-control-modern" rows="3"
+                placeholder="Ask a question or share a hint..." style="width: 100%; margin-bottom: 1rem;"></textarea>
+
+            <button type="submit" id="send-comment-btn" class="btn-modern btn-primary">
+                <i class="fas fa-paper-plane"></i> Post Comment
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Comments List -->
+<div id="comment-list" class="animate-fade-in">
+    <h3>Comments</h3>
+
+    {% for comment in page_obj %}
+    <div class="comment-box" data-comment-id="{{ comment.id }}">
+        <p style="margin:0;">
+            <strong>{{ comment.user.username }}</strong>
+            <span style="color:var(--text-secondary); font-size:0.85rem;">
+                • {{ comment.created_at|timesince }} ago
+            </span>
+        </p>
+        <p style="margin-top:0.5rem; color:var(--text-primary);">
+            {{ comment.content }}
+        </p>
+    </div>
+    {% empty %}
+    <div id="no-comments" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+        <i class="fas fa-comment-slash fa-2x" style="margin-bottom: 1rem;"></i>
+        <p>No comments yet. Be the first to comment!</p>
+    </div>
+    {% endfor %}
+
+
+</div>
+
+<div id="comment-list" class="animate-fade-in">
+    <!-- comments will be added in here -->
+</div>
+
+
+
+
+<!-- Hidden Tests Data -->
+{{ challenge.hidden_tests|json_script:"hidden-tests-data" }}
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/challenge_details.js' %}"></script>
+
+{% endblock %}

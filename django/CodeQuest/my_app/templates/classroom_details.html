@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+
+{% block title %}Classroom Details - CodeQuest{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/leaderboard.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<!-- Classroom Header -->
+<div class="dashboard-header animate-fade-in">
+    <div style="display: flex; justify-content: space-between; align-items: start;">
+        <div>
+            <h1><i class="fas fa-users"></i> {{ classroom.name }}</h1>
+            <p>{{ classroom.description }}</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            {% if user.is_staff %}
+            <!-- Mentor Actions -->
+            <button type="button" class="btn-modern btn-primary" onclick="openCreateChallengeModal()">
+                <i class="fas fa-plus"></i> Add Challenge
+            </button>
+
+
+            <button class="btn-modern btn-secondary">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+            <button class="btn-modern btn-secondary">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </button>
+            {% else %}
+            <!-- Student Actions -->
+            {% if request.user.is_authenticated %}
+            {% if is_member %}
+            <form method="POST" action="{% url 'leave_classroom' classroom.slug %}" style="margin: 0;">
+                {% csrf_token %}
+                <button class="btn-modern"
+                    style="background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid var(--error);">
+                    <i class="fas fa-sign-out-alt"></i> Leave Classroom
+                </button>
+            </form>
+            {% else %}
+            <form method="POST" action="{% url 'join_classroom' classroom.slug %}" style="margin: 0;">
+                {% csrf_token %}
+                <button class="btn-modern btn-primary">
+                    <i class="fas fa-user-plus"></i> Join Classroom
+                </button>
+            </form>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+            <a href="/classrooms/" class="btn-modern btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Classrooms
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Classroom Info Cards -->
+<div class="stats-grid animate-fade-in">
+    <div class="stat-card">
+        <div class="stat-card-icon primary">
+            <i class="fas fa-user-tie"></i>
+        </div>
+        <div class="stat-card-value">{{ classroom.mentor.username }}</div>
+        <div class="stat-card-label">Instructor</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-icon success">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-card-value">{{ members_count }}</div>
+        <div class="stat-card-label">Members</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-icon warning">
+            <i class="fas fa-code"></i>
+        </div>
+        <div class="stat-card-value">{{ challenges_count }}</div>
+        <div class="stat-card-label">Challenges</div>
+    </div>
+
+    {% if user.is_staff %}
+    <!-- Mentor-specific stat -->
+    <div class="stat-card">
+        <div class="stat-card-icon info">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-card-value">78%</div>
+        <div class="stat-card-label">Avg. Completion</div>
+    </div>
+    {% else %}
+    <!-- Student-specific stat -->
+    <div class="stat-card">
+        <div class="stat-card-icon info">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-card-value">67%</div>
+        <div class="stat-card-label">Your Progress</div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Announcements -->
+<div class="section-header">
+    <h2><i class="fas fa-bullhorn"></i> Announcements</h2>
+    {% if user.is_staff %}
+    <button class="btn-modern btn-primary" style="padding: 0.5rem 1rem;">
+        <i class="fas fa-plus"></i> Post Announcement
+    </button>
+    {% endif %}
+</div>
+
+<div class="card-modern animate-fade-in" style="margin-bottom: 2rem;">
+    <div
+        style="display: flex; align-items: start; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+        <div style="flex: 1;">
+            <h4 style="margin-bottom: 0.5rem; color: var(--text-primary);">
+                <i class="fas fa-info-circle" style="color: var(--primary-500);"></i>
+                Welcome to Python Fundamentals!
+            </h4>
+            <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                <i class="fas fa-clock"></i> Posted 2 days ago by Prof. Johnson
+            </p>
+        </div>
+    </div>
+    <p style="color: var(--text-secondary); margin: 0;">
+        Welcome everyone! We'll be covering Python basics, data structures, and algorithms. Make sure to complete all
+        challenges and participate in discussions. Good luck!
+    </p>
+</div>
+
+<!-- Challenges List -->
+<div class="section-header">
+    <h2><i class="fas fa-code"></i> Challenges</h2>
+    <span class="badge-modern badge-primary">
+        {{ completed_count|default:0 }} / {{ challenges_count }} Completed
+    </span>
+</div>
+
+<div class="challenge-list animate-fade-in">
+    {% for item in challenge_entries %}
+    {% with challenge=item.challenge status=item.status %}
+    <div class="challenge-item" onclick="window.location.href='{% url 'challenge_detail' challenge.slug %}'">
+
+        <div class="challenge-info">
+            <div class="challenge-title">{{ challenge.title }}</div>
+            <div class="challenge-meta">
+                <span class="badge-modern badge-{{ challenge.difficulty }}">
+                    <i class="fas fa-circle"></i> {{ challenge.get_difficulty_display }}
+                </span>
+                {% if challenge.tags.all %}
+                <span style="color: var(--text-secondary); font-size: 0.875rem;">
+                    <i class="fas fa-tags"></i>
+                    {% for tag in challenge.tags.all %}
+                    {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="challenge-actions">
+            {% if user.is_staff %}
+
+
+            <!-- Edit: open modal -->
+            <button type="button" class="btn-modern btn-secondary"
+                onclick="event.stopPropagation(); openEditModal('{{ challenge.slug }}')">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+
+            <!-- Delete: simple POST with confirm -->
+            <form method="POST" action="" style="display:inline;"
+                onsubmit="event.stopPropagation(); return confirm('Delete this challenge?');">
+                {% csrf_token %}
+                <button type="submit" class="btn-modern"
+                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid var(--error);">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </form>
+
+            {% else %}
+            <!-- Student View: status + start/continue/view -->
+            {% if status == "passed" %}
+            <span class="badge-modern" style="background-color: rgba(16, 185, 129, 0.1); color: var(--success);">
+                <i class="fas fa-check-circle"></i> Passed
+            </span>
+            <button class="btn-modern btn-secondary"
+                onclick="event.stopPropagation(); window.location.href='{% url 'challenge_detail' challenge.slug %}'">
+                <i class="fas fa-eye"></i> View
+            </button>
+
+            {% elif status == "not_started" %}
+            <span class="badge-modern" style="background-color: rgba(99, 102, 241, 0.1); color: var(--primary-500);">
+                <i class="fas fa-circle"></i> Not Started
+            </span>
+            <button class="btn-modern btn-primary"
+                onclick="event.stopPropagation(); window.location.href='{% url 'challenge_detail' challenge.slug %}'">
+                <i class="fas fa-play"></i> Start
+            </button>
+
+            {% elif status == "in_progress" %}
+            <span class="badge-modern" style="background-color: rgba(234, 179, 8, 0.1); color: #ca8a04;">
+                <i class="fas fa-spinner"></i> In Progress
+            </span>
+            <button class="btn-modern btn-primary"
+                onclick="event.stopPropagation(); window.location.href='{% url 'challenge_detail' challenge.slug %}'">
+                <i class="fas fa-play"></i> Continue
+            </button>
+
+            {% elif status == "failed" %}
+            <span class="badge-modern" style="background-color: rgba(248, 113, 113, 0.1); color: #ef4444;">
+                <i class="fas fa-times-circle"></i> Failed
+            </span>
+            <button class="btn-modern btn-primary"
+                onclick="event.stopPropagation(); window.location.href='{% url 'challenge_detail' challenge.slug %}'">
+                <i class="fas fa-redo"></i> Retry
+            </button>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+
+
+    {% endwith %}
+    {% empty %}
+    <p>No challenges in this classroom yet.</p>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
+<!-- CREATE CHALLENGE MODAL -->
+<div id="openCreateChallengeModal" class="modal-overlay">
+
+    <div class="modal-card card-modern modal-wide">
+
+        <!-- Header -->
+        <div class="modal-header">
+            <h2 class="modal-title">
+                <i class="fas fa-plus-circle"></i> Create Challenge
+            </h2>
+
+            <button type="button" class="modal-close" onclick="closeCreateChallengeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" action="{% url 'mentor_create_challenge' classroom.slug %}">
+            {% csrf_token %}
+
+            <div class="modal-body">
+
+                <div class="modal-columns">
+
+                    <!-- LEFT COLUMN -->
+                    <div class="modal-col">
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Title</label>
+                            <input type="text" name="title" class="form-control-modern" placeholder="e.g. Two Sum"
+                                required>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Points</label>
+                            <input type="number" name="points" class="form-control-modern" min="0" value="10" required>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Difficulty</label>
+                            <select name="difficulty" class="form-control-modern">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Description</label>
+                            <textarea name="description" class="form-control-modern" rows="4"
+                                placeholder="Describe the problem statement..." required></textarea>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="modal-col">
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Input Description</label>
+                            <textarea name="input_description" class="form-control-modern" rows="2"
+                                placeholder="Explain the input format..."></textarea>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Output Description</label>
+                            <textarea name="output_description" class="form-control-modern" rows="2"
+                                placeholder="Explain the output format..."></textarea>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Sample Input</label>
+                            <textarea name="sample_input" class="form-control-modern" rows="2"
+                                placeholder="e.g.&#10;2 3"></textarea>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">Sample Output</label>
+                            <textarea name="sample_output" class="form-control-modern" rows="2"
+                                placeholder="e.g.&#10;5"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern">Example Explanation</label>
+                    <textarea name="example_explanation" class="form-control-modern" rows="3"
+                        placeholder="Optional explanation of the sample input/output..."></textarea>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern">Starter Code</label>
+                    <textarea name="starter_code" class="form-control-modern" rows="3"
+                        placeholder="Optional starter code for students..."></textarea>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern">Constraints</label>
+                    <textarea name="constraints" class="form-control-modern" rows="2"
+                        placeholder="e.g. 1 ≤ n ≤ 10^5"></textarea>
+                </div>
+
+                <div class="form-group-modern">
+                    <label class="form-label-modern">Hidden Tests (JSON)</label>
+                    <textarea name="hidden_tests" class="form-control-modern" rows="3"
+                        placeholder='Example: [{"input": "2 3", "output": "5"}]'></textarea>
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn-modern btn-secondary" onclick="closeCreateChallengeModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="btn-modern btn-primary">
+                    <i class="fas fa-check"></i> Create
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+<script>
+    function openCreateChallengeModal() {
+        const modal = document.getElementById("openCreateChallengeModal");
+        if (modal) {
+            modal.style.display = "flex";  // because we use align-items / justify-content
+        }
+    }
+
+    function closeCreateChallengeModal() {
+        const modal = document.getElementById("openCreateChallengeModal");
+        if (modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Optional: close when clicking outside the content
+    document.addEventListener("click", function (e) {
+        const modal = document.getElementById("openCreateChallengeModal");
+        if (!modal) return;
+
+        const dialog = modal.firstElementChild;
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+</script>
+
+{% endblock content %}

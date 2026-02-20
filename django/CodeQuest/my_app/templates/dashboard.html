@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CodeQuest{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="dashboard-header animate-fade-in">
+    <h1>Welcome back, {{ user.username|default:"Student" }}! 👋</h1>
+    <p>Ready to tackle some challenges today?</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid animate-fade-in">
+    <div class="stat-card">
+        <div class="stat-card-icon primary">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <div class="stat-card-value">{{ total_solved|default:"0" }}</div>
+        <div class="stat-card-label">Challenges Solved</div>
+        <div class="stat-card-change positive">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-icon success">
+            <i class="fas fa-star"></i>
+        </div>
+        <div class="stat-card-value">{{ total_points|default:"0" }}</div>
+        <div class="stat-card-label">Total Points</div>
+        <div class="stat-card-change positive">
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-icon warning">
+            <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-card-value">{{ classrooms_joined|default:"0" }}</div>
+        <div class="stat-card-label">Classrooms Joined</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-icon info">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-card-value">#{{ global_rank|default:"--" }}</div>
+        <div class="stat-card-label">Global Rank</div>
+        <div class="stat-card-change positive">
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-header">
+    <h2>Quick Actions</h2>
+</div>
+<div class="quick-actions animate-fade-in">
+    <a href="/classrooms" class="quick-action-btn">
+        <i class="fas fa-users"></i>
+        <span>Browse Classrooms</span>
+    </a>
+    <a href="/challenges" class="quick-action-btn">
+        <i class="fas fa-code"></i>
+        <span>Explore Challenges</span>
+    </a>
+    <a href="/leaderboard" class="quick-action-btn">
+        <i class="fas fa-chart-bar"></i>
+        <span>View Leaderboard</span>
+    </a>
+    <a href="/profile" class="quick-action-btn">
+        <i class="fas fa-user"></i>
+        <span>My Profile</span>
+    </a>
+</div>
+
+<!-- My Classrooms -->
+<div class="section-header">
+    <h2><i class="fas fa-users"></i> My Classrooms</h2>
+    <a href="/classrooms">
+        View All <i class="fas fa-arrow-right"></i>
+    </a>
+</div>
+
+<div class="classroom-grid animate-fade-in">
+    {% for classroom in my_classrooms %}
+        <div class="classroom-card"
+             onclick="window.location.href='{% url 'classroom_detail' classroom.slug %}'">
+            <div class="classroom-card-header">
+                <h3>{{ classroom.name }}</h3>
+                <p>{{ classroom.description }}</p>
+            </div>
+            <div class="classroom-card-body">
+                <div class="classroom-meta">
+                    <div class="classroom-meta-item">
+                        <i class="fas fa-user-tie"></i>
+                        <span>{{ classroom.mentor.username }}</span>
+                    </div>
+                    <div class="classroom-meta-item">
+                        <i class="fas fa-users"></i>
+                        <span>{{ classroom.members_count }} members</span>
+                    </div>
+                </div>
+                <div class="classroom-meta">
+                    <div class="classroom-meta-item">
+                        <i class="fas fa-code"></i>
+                        <span>{{ classroom.challenges_count }} challenges</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>You are not in any classrooms yet. <a href="{% url 'classrooms_page' %}">Join one</a>.</p>
+    {% endfor %}
+</div>
+
+<!-- Recently Solved Challenges -->
+<div class="section-header">
+    <h2><i class="fas fa-history"></i> Recently Solved</h2>
+    <a href="/challenges">
+        View All <i class="fas fa-arrow-right"></i>
+    </a>
+</div>
+
+<div class="challenge-list animate-fade-in">
+    {% for sub in recent_submissions %}
+        <div class="challenge-item"
+             onclick="window.location.href='{% url 'challenge_detail' sub.challenge.slug %}'">
+            <div class="challenge-info">
+                <div class="challenge-title">{{ sub.challenge.title }}</div>
+                <div class="challenge-meta">
+                    <span class="badge-modern badge-{{ sub.challenge.difficulty|lower }}">
+                        <i class="fas fa-circle"></i> {{ sub.challenge.difficulty }}
+                    </span>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem;">
+                        <i class="fas fa-folder"></i> {{ sub.challenge.classroom.name }}
+                    </span>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem;">
+                        <i class="fas fa-clock"></i> Solved {{ sub.created_at|timesince }} ago
+                    </span>
+                </div>
+            </div>
+            <div class="challenge-actions">
+                <span class="badge-modern"
+                      style="background-color: rgba(16, 185, 129, 0.1); color: var(--success);">
+                    <i class="fas fa-check-circle"></i> Passed
+                </span>
+            </div>
+        </div>
+    {% empty %}
+        <p>No solved challenges yet. <a href="{% url 'challenge_list' %}">Start one!</a></p>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}

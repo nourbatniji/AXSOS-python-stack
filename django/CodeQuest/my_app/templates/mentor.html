@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Mentor Dashboard - CodeQuest{% endblock %}
+
+{% block extra_css %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Mentor Dashboard Header -->
+<div class="dashboard-header animate-fade-in">
+    <h1>Mentor Dashboard</h1>
+    <p>Manage your classrooms and track student progress</p>
+</div>
+
+<!-- Quick Stats -->
+<div class="stats-grid animate-fade-in">
+    <div class="stat-card">
+        <div class="stat-card-value">{{ total_classrooms }}</div>
+        <div class="stat-card-label">My Classrooms</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-value">{{ total_students }}</div>
+        <div class="stat-card-label">Total Students</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-value">{{ total_challenges }}</div>
+        <div class="stat-card-label">Total Challenges</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-card-value">{{ total_submissions }}</div>
+        <div class="stat-card-label">Submissions</div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-header">
+    <h2>Quick Actions</h2>
+</div>
+<div class="quick-actions animate-fade-in">
+    <a href="{% url 'classrooms_page' %}" class="quick-action-btn">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create Classroom</span>
+    </a>
+    <a href="{% url 'classrooms_page' %}" class="quick-action-btn">
+        <i class="fas fa-code"></i>
+        <span>Manage Challenges</span>
+    </a>
+    <a href="/admin" class="quick-action-btn">
+        <i class="fas fa-cog"></i>
+        <span>Django Admin</span>
+    </a>
+</div>
+
+<!-- My Classrooms -->
+<div class="section-header">
+    <h2><i class="fas fa-users"></i> My Classrooms</h2>
+    <a href="/admin/my_app/classroom/">
+        Manage in Admin <i class="fas fa-external-link-alt"></i>
+    </a>
+</div>
+
+<div class="classroom-grid animate-fade-in">
+    {% if classrooms %}
+    {% for classroom in classrooms %}
+    <div class="classroom-card" onclick="window.location.href='{% url 'classroom_detail' classroom.slug %}'">
+        <div class="classroom-card-header">
+            {# Adjust classroom.title / classroom.name as needed #}
+            <h3>{{ classroom.name }}</h3>
+        </div>
+        <div class="classroom-card-body">
+            <div class="classroom-meta">
+                <div class="classroom-meta-item">
+                    <i class="fas fa-users"></i>
+                    <span>{{ classroom.students_count }} students</span>
+                </div>
+                <div class="classroom-meta-item">
+                    <i class="fas fa-code"></i>
+                    <span>{{ classroom.challenges_count }} challenges</span>
+                </div>
+            </div>
+            <div class="classroom-meta">
+                <div class="classroom-meta-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ classroom.submissions_count }} submissions</span>
+                </div>
+                <div class="classroom-meta-item">
+                    <i class="fas fa-chart-line"></i>
+                    {# For now, just show "N/A" or a placeholder until you compute it #}
+                    <span>N/A avg completion</span>
+                </div>
+            </div>
+        </div>
+        <div class="classroom-card-footer">
+            <span style="font-size: 0.875rem; color: var(--text-secondary);">
+                <i class="fas fa-clock"></i> Active
+            </span>
+            <button class="btn-modern btn-primary"
+                onclick="event.stopPropagation(); window.location.href='{% url 'classroom_detail' classroom.slug %}'">
+                <i class="fas fa-eye"></i> View
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No classrooms found yet. Create one from the Quick Actions above.</p>
+    {% endif %}
+</div>
+
+<!-- Recent Activity -->
+<div class="section-header" style="margin-top: 2rem;">
+    <h2><i class="fas fa-history"></i> Recent Submissions</h2>
+</div>
+
+<div class="card-modern animate-fade-in">
+    {% if recent_submissions %}
+    <div class="activity-list">
+
+        {% for submission in recent_submissions %}
+        <div class="submission-card">
+
+            <div class="submission-left">
+                <div class="avatar-circle">
+                    {{ submission.user.username|first|upper }}
+                </div>
+
+                <div class="submission-text">
+                    <div class="submission-title">
+                        <strong>{{ submission.user.username }}</strong>
+                        submitted
+                        <strong>{{ submission.challenge.title }}</strong>
+                    </div>
+
+                    <div class="submission-time">
+                        <i class="fas fa-clock"></i>
+                        {{ submission.created_at|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="submission-right">
+                {% if submission.status %}
+                <span class="badge-modern badge-{{ submission.status }}">
+                    {% if submission.status == "passed" %}
+                        <i class="fas fa-check-circle"></i> Passed
+                    {% elif submission.status == "failed" %}
+                        <i class="fas fa-times-circle"></i> Failed
+                    {% else %}
+                        <i class="fas fa-spinner"></i> {{ submission.status }}
+                    {% endif %}
+                </span>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fas fa-inbox"></i>
+        </div>
+        <h3>No Recent Submissions</h3>
+        <p>Student submissions will appear here once they start solving challenges.</p>
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock %}
