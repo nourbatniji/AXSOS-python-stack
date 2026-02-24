@@ -1,0 +1,21 @@
+# Secrets / keys
+*.pem
+*.key
+
+# Environments
+venv/
+.venv/
+env/
+.env
+
+# Python junk
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Django / Flask common
+db.sqlite3
+media/
+staticfiles/
