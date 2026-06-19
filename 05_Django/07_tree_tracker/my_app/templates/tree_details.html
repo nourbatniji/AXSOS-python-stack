@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <h1>Tree Mapper</h1>
+        <h2>Welcome {{ logged_user.first_name }}</h2>
+        <a href="/sign_out">signout</a>
+        <a href="/dashboard">dashboard</a>
+
+
+        <br>
+        <div>
+            <h1>{{ tree.species }} added by {{ tree.created_by.first_name }}{{ tree.created_by.lasst_name }}</h1>
+            <h5>Where {{ tree.location }}</h5>
+            <h5>When {{ tree.created_at }}</h5>
+            <h5>Notes {{ tree.notes }}</h5>
+
+
+
+            <div class="border">
+                visited by
+                {% for tree in visits %}
+                {% for user in tree.users_visits.all %}
+                <ul>
+                    <li>{{ user.first_name }}{{ user.last_name }}</li>
+                    <br>
+                </ul>
+                {% endfor %}
+                {% endfor %}
+
+                {% if not has_visited %}
+                <form action="/visit_tree/{{ tree.id }}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="user_id" id="user_id" value="{{logged_user.id}}">
+                    <button>Did you visit the tree?</button>
+                </form>
+                {% elif logged_user.has_visited %}
+                <p>already visited</p>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

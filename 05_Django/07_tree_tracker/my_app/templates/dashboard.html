@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="/sign_out">signout</a>
+
+        <h1>Tree mapper</h1>
+        <h2>Welcome {{ user.first_name }}</h2>
+        <div class="d-flex">
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Species</th>
+                        <th>View</th>
+                        <th>Mapped by</th>
+                        <th>Zip code</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tree in trees %}
+                    <tr>
+                        <td>{{ tree.species }}</td>
+
+                        <!-- Details -->
+                        <td><a href="/tree_details_page/{{ tree.id }}">More</a></td>
+
+                        <td>{{ tree.created_by.first_name }}{{ tree.created_by.last_name }}</td>
+
+                         <!-- zip code -->
+                        <td><a href="/zipcode_page/{{ tree.zip_code.id }}">{{ tree.zip_code.zip_number }}</a></td>
+
+
+                        <!-- Logged user actions -->
+                        {% if tree.created_by.id == user.id %}
+                        <td>
+                            <form action="/delete_tree" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="tree_id" id="tree_id" value="{{ tree.id }}">
+                                <button>Delete</button>
+                            </form>
+                            <button><a href="/edit_tree_page/{{ tree.id }}">Edit</a></button>
+                        </td>
+                        {% endif %}
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+        <a href="/add_tree_page">+ Pist a new tree on the map</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="{% static 'script.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="greet">
+            <h1>Welcome, {{ user.first_name }}!</h1>
+            <a href="/logout">Log Out</a>
+        </div>
+
+        <div class="book_container">
+            <!-- IF THE LOGGED USER UPLOADED THIS BOOK    can update/delete/unfav-->
+            {% if user.first_name == book.uploaded_by.first_name%}
+            <div>
+                <form action="/update_book" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <label for="title" class="fs-5">Title</label>
+                    <input type="text" name="title" id="title" value="{{ book.title }}">
+                    <h5>Added By: <span class="fw-light">{{ book.uploaded_by.first_name }}</span></h5>
+                    <h5>Added on: <span class="fw-light">{{ book.created_at }}</span></h5>
+                    <h5>Last updated on: <span class="fw-light">{{ book.updated_at }}</span></h5>
+                    <label for="desc" class="fs-5">Title</label>
+                    <input type="text" name="desc" id="desc" value="{{ book.desc }}">
+                    <button>Update</button>
+                </form>
+                <form action="/delete_book" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                    <button>Delete</button>
+                </form>
+            </div>
+
+            <!-- Users liked this book -->
+            <div class="w-50">
+                <h3>Users Who Like This Book</h3>
+                <ul>
+                    {% for users in book.liked_by.all %}
+                    <li class="d-flex align-items-baseline">
+                        <h5>{{ users.first_name }}</h5>
+                        {% if book in liked_books %}
+                        <form action="/delete_book_from_fav" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="book_id" value="{{ book.id }}">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <button>Unfavorite</button>
+                        </form>
+                        {% endif %}
+
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="book_container2">
+            <!-- DIDN'T UPLOAD IT -->
+            {% else %}
+            {% if book in liked_books %}
+
+            <form action="/delete_book_from_fav" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="book_id" value="{{ book.id }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <button class="mb-3">Unfavorite</button>
+            </form>
+
+            {% else %}
+            <form action="/add_book_to_user_likes" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="user_id" id="user_id" value="{{ user.id }}">
+                <input type="hidden" name="book_id" id="book_id" value="{{ book.id }}">
+                <button class="mb-3">Add To Favorites</button>
+            </form>
+            {% endif %}
+
+            <h3>{{ book.title }}</h3>
+            <h5>Added By: <span class="fw-light">{{ book.uploaded_by.first_name }}</span></h5>
+            <h5>Added on: <span class="fw-light">{{ book.created_at }}</span></h5>
+            <h5>Last updated on: <span class="fw-light">{{ book.updated_at }}</span></h5>
+            <h5>Description: <span class="fw-light">{{ book.desc }}</span></h5>
+            <p class="pb-5">Your not Allowed to change</p>
+
+
+
+            <!-- Users liked this book -->
+            <div>
+                <h2>Users Who Like This Book</h2>
+                <ul>
+                    {% for users in book.liked_by.all %}
+                    <li>{{ users.first_name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% endif %}
+        </div>
+    </header>
+</body>
+
+</html>

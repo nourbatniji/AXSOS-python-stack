@@ -1,0 +1,103 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 48px;
+
+    h2 {
+        padding-bottom: 20px;
+    }
+
+}
+
+.reg, .login {
+    width: 50%;
+    border: 2px solid black;
+    padding: 30px;
+
+    label {
+        width: 25%;
+        font-size: larger;
+    }
+
+    input {
+        width: 70%;
+        padding: 5px;
+        border: 2px solid black;
+    }
+
+    button {
+        margin: 10px 15px;
+        background-color: white;
+        border: 2px solid black;
+        box-shadow: 3px 3px black;
+    }
+}
+
+.greet {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    border-bottom: 2px solid black;
+
+    a {
+        font-size: 18px;
+    }
+}
+
+ul {
+    list-style: none;
+}
+
+.book {
+    padding: 10px;
+    border-bottom: 2px solid black;
+}
+
+
+.book_container {
+    width: 80%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: auto;
+    padding: 48px 0;
+
+
+    input{
+        width: 100%;
+    }
+    h2 {
+        padding-bottom: 20px;
+    }
+    h5{
+        padding-top: 10px ;
+    }
+
+}
+
+.book_container2{
+    width: 80%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: auto;
+    padding: 48px 0;
+  
+    h2 {
+        padding-bottom: 0px;
+    }
+    h5{
+        padding-top: 30px ;
+    }
+}

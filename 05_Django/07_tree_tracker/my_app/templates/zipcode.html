@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/sign_out">signout</a>
+        <a href="/dashboard">dashboard</a>
+
+        <h1>Tree mapper</h1>
+        <h2>Welcome {{ user.first_name }}</h2>
+        <div>
+
+
+            <h2>Trees in zip code {{ zip.zip_number }}</h2>
+
+            <br>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Species</th>
+                        <th>Date Seen</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tree in zip.code_trees.all %}
+                    <tr>
+                        <td>{{ tree.species }}</td>
+                        <td>{{tree.created_at|date:'Y-m-d'}}</td>
+                        <td>{{tree.location}}</td>    
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
+
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+bcrypt==5.0.0
+Django==2.2.4
+psycopg2==2.9.11
+psycopg2-binary==2.9.11
+pytz==2025.2
+

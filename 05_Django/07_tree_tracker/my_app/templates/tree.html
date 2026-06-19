@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome {{ user.first_name }}</h2>
+        <h1>Add a tree</h1>
+
+        <form action="/create_tree" method="post">
+            {% csrf_token %}
+            <input type="text" name="user_id" id="user_id" value="{{ user.id }}">
+            <!-- SPECIES -->
+            <div>
+                <label for="species">species</label>
+                <input type="text" name="species" id="species">
+                {% if errors.species %}
+                <p class="text-danger">{{ errors.species }}</p>
+                {% elif errors.species_length %}
+                <p class="text-danger">{{ errors.species_length }}</p>
+                {% endif %}
+            </div>
+
+            <!-- LOCATION -->
+            <div>
+                <label for="location">location</label>
+                <input type="text" name="location" id="location">
+                {% if errors.location %}
+                <p class="text-danger">{{ errors.location }}</p>
+                {% elif errors.location_len %}
+                <p class="text-danger">{{ errors.location_len }}</p>
+                {% endif %}
+            </div>
+
+
+            <!-- DATE -->
+            <div>
+                <label for="date_found">date found</label>
+                <input type="date" name="date_found" id="date_found">
+
+                {% if errors.date_found %}
+                <p class="text-danger">{{ errors.date_found }}</p>
+                {% elif errors.date_found_valid %}
+                <p class="text-danger">{{ errors.date_found_valid }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- ZIP CODE -->
+            <div>
+                <label for="zip_code">zip_code</label>
+                <input type="text" name="zip_code" id="zip_code">
+                {% if errors.zip_code %}
+                <p class="text-danger">{{ errors.zip_code }}</p>
+                {% elif errors.zip_code_num %}
+                <p class="text-danger">{{ errors.zip_code_num }}</p>
+                {% elif errors.zip_code_len %}
+                <p class="text-danger">{{ errors.zip_code_len }}</p>
+                {% endif %}
+            </div>
+         
+            <!-- NOTES -->
+            <div>
+                <label for="notes">notes</label>
+                <textarea name="notes" id="notes"></textarea>
+                {% if errors.notes %}
+                <p class="text-danger">{{ errors.notes }}</p>
+                {% elif errors.notes_len %}
+                <p class="text-danger">{{ errors.notes_len }}</p>
+                {% endif %}
+            </div>
+            <button>Submit</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Books</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="{% static 'script.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="greet">
+            <h1>Welcome, {{ user.first_name }}!</h1>
+            <a href="/logout">Log Out</a>
+        </div>
+        <div class="container">
+            <form action="/add_fav_book" method="post">
+                {% csrf_token %}
+                <h3>Add a Favorite Book</h3>
+                <div class="mb-3">
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title">
+                </div>
+                <div class="mb-3">
+                    <label for="desc">Description</label>
+                    <input type="text" name="desc" id="desc">
+                </div>
+                <input type="hidden" name="user_id" id="user_id" value="{{ user.id }}">
+                <button>Add</button>
+            </form>
+            <div class="w-50 ms-5 ps-5">
+                <h2>All Books</h2>
+                <ul>
+                    {% for book in all_books %}
+                    <li class="book">
+                        <ul>
+                            <li class="text-primary fs-5"><a href="/books/{{ book.id }}">{{ book.title }} {{ book.id
+                                    }}</a></li>
+                            <li>{{ book.desc }}</li>
+                            <li>
+                                {% if book in liked_books %}
+                                <p class="fst-italic">this is one of your favorites</p>
+                                {% else %}
+                                <form action="/add_book_to_user_likes" method="post" class="border-0 p-0">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="user_id" id="user_id" value="{{ user.id }}">
+                                    <input type="hidden" name="book_id" id="book_id" value="{{ book.id }}">
+                                    <button class="border-0 link-underline text-primary shadow-sm m-0">Add To
+                                        Favorites</button>
+                                </form>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </header>
+
+</body>
+
+</html>
