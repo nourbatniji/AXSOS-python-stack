@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="{% static 'script.js' %}"></script>
+
+</head>
+<body>
+    <div class="container">
+        <form action="/login" method="post" onsubmit="return validate_login()">
+            {% csrf_token %}
+             <div>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="login_email">
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" id="login_password">
+            </div>
+            <button>Log In</button>
+            
+        </form>
+            <button><a href="/go_to_signup">Register</a></button>
+
+         {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{% static 'script.js' %}"></script>
+</head>
+<body>
+    {% for user in userdetails %}
+    <div class="container">
+        <form action="/edit/{{ user.id }}" method="post" onsubmit="return validate_reg()">
+            {% csrf_token %}
+            <div>
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}">
+            </div>
+            <div>
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}">
+            </div>
+            <div>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" value="{{ user.email }}">
+            </div>
+            <div>
+                <label for="password">New Password</label>
+                <input type="password" name="password" id="password" value="">
+            </div>
+            <div>
+                <label for="confirm_pw">Confirm Password</label>
+                <input type="password" name="confirm_pw" id="confirm_pw" value="">
+            </div>
+            <button>Create</button>
+        </form>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endfor %}
+</body>
+</html>

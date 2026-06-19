@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <p>
+            {% for user in userdetails %}
+    {{ user.first_name }}
+    {% endfor %}
+        </p>
+        <a href="/users">Back</a>
+        <a href="/sign_out">Sign out</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <form action="/add_address" method="post">
+            {% csrf_token%}
+            <div>
+                <label for="country">Country</label>
+                <input type="text" name="country" id="country">
+            </div>
+            <div>
+                <label for="city">city</label>
+                <input type="text" name="city" id="city">
+            </div>
+            <div>
+                <label for="state">state</label>
+                <input type="text" name="state" id="state">
+            </div>
+            {{ user_id }}
+            <input type="hidden" name="user_id" value="{{ user }} ">
+
+            <div>
+                <button>Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

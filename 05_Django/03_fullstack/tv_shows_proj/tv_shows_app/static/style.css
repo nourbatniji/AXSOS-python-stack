@@ -1,0 +1,57 @@
+.table-bordered {
+  border: 3px solid #000 !important; 
+}
+th{
+    background-color: #cccccc !important;
+}
+.table-bordered th,
+.table-bordered td {
+  border-left: 3px solid #000000 !important; 
+  border-right: 3px solid #000000 !important; 
+}
+
+
+a{
+    color: rgb(49, 94, 190) !important;
+}
+
+h5{
+    padding: 10px 0 !important;
+}
+
+.go-back{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.container{
+    position: relative;
+
+}
+
+input, textarea{
+    margin: 5px 0 20px 0 !important;
+    padding: 5px;
+    border: 2px solid #000;
+    width: 80%;
+}
+.w-40{
+    width: 40% !important;
+    input{
+        width: 95%;
+    }
+}
+
+
+#desc{
+    height: 150px !important;
+    text-align: start;
+}
+
+button{
+    background-color: white;
+    padding: 3px;
+    border: 2px solid #000;
+    box-shadow: 3px 3px #000;
+    margin: 15px 0 !important;
+}

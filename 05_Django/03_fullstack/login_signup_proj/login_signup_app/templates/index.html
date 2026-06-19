@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="{% static 'script.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+
+<body>
+    <div class="container">
+        <form action="/reg_user" method="post" onsubmit="return validate_reg()">
+            {% csrf_token %}
+            <h1>Register</h1>
+            <div class="input-field mb-3">
+                <label class="form-label" for="first_name">First Name</label>
+                <input class="form-control" type="text" name="first_name" id="first_name">
+            </div>
+            <div class="input-field mb-3">
+                <label class="form-label" for="last_name">Last Name</label>
+                <input class="form-control" type="text" name="last_name" id="last_name">
+            </div>
+            <div class="input-field mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" name="email" id="email">
+            </div>
+            <div class="input-field mb-3">
+                <label class="form-label" for="birthday">Birthday</label>
+                <input class="form-control" type="date" name="birthday" id="birthday">
+            </div>
+            <div class="input-field mb-3">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="password">
+            </div>
+            <div class="input-field mb-3">
+                <label class="form-label" for="confirm_pw">Confirm Password</label>
+                <input class="form-control" type="password" name="confirm_pw" id="confirm_pw">
+            </div>
+            <div class="btn w-100 my-3">
+                <button>Register</button>
+            </div>
+        </form>
+
+        <form action="/login_user" method="post" onsubmit="return validate_login()">
+            {% csrf_token %}
+            <h1>Login</h1>
+            <div class="input-field mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" name="email" id="login-email">
+            </div>
+            <div class="input-field mb-3">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" type="password" name="password" id="login-password">
+            </div>
+            <div class="btn w-100 my-3">
+                <button>Log In</button>
+            </div>
+
+        </form>
+
+    </div>
+    <div class="reg_errors">
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
+
+</html>

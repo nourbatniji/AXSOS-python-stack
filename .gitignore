@@ -7,10 +7,12 @@ venv/
 .venv/
 env/
 .env
+my-environment/
 
 # Python junk
 __pycache__/
 *.pyc
+*.pyo
 
 # macOS
 .DS_Store
@@ -19,3 +21,14 @@ __pycache__/
 db.sqlite3
 media/
 staticfiles/
+
+# Screenshots / media
+*.png
+*.jpeg
+*.jpg
+*.gif
+
+# Course PDFs and docs (keep locally, not in repo)
+*.pdf
+*.docx
+*.rtf
